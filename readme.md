@@ -144,21 +144,21 @@ $guarded specifies which attributes in the table shouldn't be mass-assignable.
 
 ## Properties for Tables, Keys, Increments, Pages and Dates 
 
-$table specifies a custom table.
+`$table` specifies a custom table.
 
-$primaryKey specifies a custom primary key. 
+`$primaryKey` specifies a custom primary key. 
 
-$incrementing specifies a non-incrementing or a non-numeric primary key.
+`$incrementing` specifies a non-incrementing or a non-numeric primary key.
 
-$perPage specifies the number of items per page in paginate.
+`$perPage` specifies the number of items per page in paginate.
 
-$timestamps disable created_at and updated_at columns.
+`$timestamps` disable created_at and updated_at columns.
 
-CREATED_AT and UPDATED_AT specify the custom names of the columns used to store the timestamps.
+`CREATED_AT` and `UPDATED_AT` specify the custom names of the columns used to store the timestamps.
 
-$dateFormat specifies the custom format of your timestamps.
+`$dateFormat` specifies the custom format of your timestamps.
 
-$dates converts columns to instances of Carbon.
+`$dates` converts columns to instances of Carbon.
 
     <?php
 
