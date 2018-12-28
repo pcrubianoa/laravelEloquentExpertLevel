@@ -276,7 +276,7 @@ Observers are used to group event listeners for a model, for create a new observ
 
     php artisan make:observer ArticleObserver --model=Article
 
-Register the observer in the AppServiceProvider:
+Register the observer in the `AppServiceProvider`:
 
     <?php
 
@@ -327,3 +327,31 @@ ArticleObserver:
 Every time an article is created, we will have a message in log.
 
     [2018-09-19 20:15:26] local.INFO: Article is saved
+
+## Accessors and Mutators: Change Model Values 
+
+Accessors and mutators allow you to format Eloquent attribute values when you retrieve or set them on model instances. 
+
+Accesor -> get Attribute
+Mutator -> set Attribute
+
+Create a `getFullNameAttribute` method on model:
+
+    public function getFullNameAttribute()
+    {
+        return $this->name . ' ' . $this->surname;
+    }
+
+To access the value of the accessor, you may access the  `first_name` attribute on a model instance:
+
+    <td>{{ $user->full_name }}</td>
+
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucfirst($value);
+    }
+
+to set the first_name attribute to Taylor:
+
+    $user->first_name = 'taylor';
