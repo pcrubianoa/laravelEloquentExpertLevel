@@ -56,3 +56,35 @@
  - spatie/laravel-tags: Add Tags and Taggable Behavior 
  - owen-it/laravel-auditing: Record the Changes From Models 
  - michaeldyrynda/laravel-cascade-soft-deletes: Cascade Delete & Restore 
+
+
+## Artisan Command make:model with (hidden) options 
+
+ Create a model instance:
+ 
+    php artisan make:model Post
+
+ Create a model instance with migration:
+
+    php artisan make:model Post --migration
+    php artisan make:model Post -m
+
+ Create a model instance with migration and controller:
+
+     php artisan make:model Post -mc
+
+ Create a model instance with migration and resource controller:
+
+     php artisan make:model Post -mcr
+
+ Create a model instance with migration,resource controller and factory:
+
+    php artisan make:model Post -mcrf
+
+Shorcut to create a model instance with migration,resource controller and factory:
+
+    php artisan make:model Post -a
+
+Display and describe the command's available arguments and options:
+
+    php artisan make:model --help
