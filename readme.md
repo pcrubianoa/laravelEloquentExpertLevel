@@ -355,3 +355,96 @@ To access the value of the accessor, you may access the  `first_name` attribute 
 to set the first_name attribute to Taylor:
 
     $user->first_name = 'taylor';
+
+## Database Seeds and Factories: Prepare Dummy Data
+
+### Seeders
+
+Seeding your database with test data using seed classes. Create seeder run:
+
+    php artisan make:seeder UsersTableSeeder
+
+add a database insert statement to the run method:
+
+    <?php
+
+    use Illuminate\Database\Seeder;
+
+    class UserTableSeeder extends Seeder
+    {
+        /**
+        * Run the database seeds.
+        *
+        * @return void
+        */
+        public function run()
+        {
+            \App\User::create('users')->insert([
+                'name' => 'Admin',
+                'email' => 'admin@admin.com',
+                'password' => bcrypt('password'),
+            ]);
+        }
+    }
+
+Register seeder in `DatabaseSeeder`:
+
+    <?php
+
+    use Illuminate\Database\Seeder;
+
+    class DatabaseSeeder extends Seeder
+    {
+        /**
+        * Seed the application's database.
+        *
+        * @return void
+        */
+        public function run()
+        {
+            $this->call(UsersTableSeeder::class);
+        }
+    }
+
+Finally we run seeder :
+
+    php artisan db:seed
+
+### Model Factories
+
+Factories generate large amounts of database records. Laravel brings by default the `UserFactory` with the data to declare a user:
+Laravel uses Faker that is a PHP library that generates fake data. [Read more](https://github.com/fzaninotto/Faker)
+
+    <?php
+
+    use Faker\Generator as Faker;
+
+
+    $factory->define(App\User::class, function (Faker $faker) {
+        return [
+            'name' => $faker->name,
+            'email' => $faker->unique()->safeEmail,
+            'email_verified_at' => now(),
+            'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
+            'remember_token' => str_random(10),
+        ];
+    });
+
+then we call factory in  `UserTableSeeder`. We can also specify the number of records:
+
+    <?php
+
+    use Illuminate\Database\Seeder;
+
+    class UserTableSeeder extends Seeder
+    {
+        /**
+        * Run the database seeds.
+        *
+        * @return void
+        */
+        public function run()
+        {
+            factory(App\User::class, 50)->create();
+        }
+    }
