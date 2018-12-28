@@ -100,3 +100,44 @@ Table | plural | article_comments | ~~article_comment, articleComments~~
 Migration | - | 2017_01_01_000000_create_articles_table | ~~2017_01_01_000000_articles~~
 
 Read more naming conventions [Laravel best practices](https://github.com/alexeymezenin/laravel-best-practices/blob/master/README.md#follow-laravel-naming-conventions)
+
+
+## Saving a Model: $fillable or $guarded? 
+
+Mass assignment: means to send an array to the model to directly create a new record in Database.
+
+$fillable specifies which attributes in the table should be mass-assignable.
+
+    <?php
+
+    namespace App;
+
+    use Illuminate\Database\Eloquent\Model;
+
+    class Article extends Model
+    {
+        /**
+        * The attributes that are mass assignable.
+        *
+        * @var array
+        */
+        protected $fillable = ['title', 'article_text'];
+    }
+
+$guarded specifies which attributes in the table shouldn't be mass-assignable.
+    
+    <?php
+
+    namespace App;
+
+    use Illuminate\Database\Eloquent\Model;
+
+    class Article extends Model
+    {
+        /**
+        * The attributes that are mass assignable.
+        *
+        * @var array
+        */
+        protected $guarded = ['id'];
+    }
