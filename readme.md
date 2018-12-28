@@ -141,3 +141,59 @@ $guarded specifies which attributes in the table shouldn't be mass-assignable.
         */
         protected $guarded = ['id'];
     }
+
+## Properties for Tables, Keys, Increments, Pages and Dates 
+
+$table specifies a custom table.
+
+$primaryKey specifies a custom primary key. 
+
+$incrementing specifies a non-incrementing or a non-numeric primary key.
+
+$perPage specifies the number of items per page in paginate.
+
+$timestamps disable created_at and updated_at columns.
+
+CREATED_AT and UPDATED_AT specify the custom names of the columns used to store the timestamps.
+
+$dateFormat specifies the custom format of your timestamps.
+
+$dates converts columns to instances of Carbon.
+
+    <?php
+
+    namespace App;
+
+    use Illuminate\Database\Eloquent\Model;
+
+    class Article extends Model
+    {
+        /**
+        * The attributes that are mass assignable.
+        *
+        * @var array
+        */
+        protected $table = 'user_articles';
+
+        protected $primaryKey = 'article_id';
+
+        public $incrementing = false;
+
+        $perPage = 5;
+
+        public $timestamps = false;
+
+        const CREATED_AT = 'creation_date';
+
+        const UPDATED_AT = 'last_update';
+
+        protected $dateFormat = 'm/d/Y H:i:s';
+
+        protected $dates = [
+            'created_at',
+            'updated_at',
+            'deleted_at'
+        ];
+                
+    }
+
