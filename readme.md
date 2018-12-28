@@ -57,6 +57,7 @@
  - owen-it/laravel-auditing: Record the Changes From Models 
  - michaeldyrynda/laravel-cascade-soft-deletes: Cascade Delete & Restore 
 
+# Eloquent Model Options and Settings
 
 ## Artisan Command make:model with (hidden) options 
 
@@ -197,3 +198,74 @@ $guarded specifies which attributes in the table shouldn't be mass-assignable.
                 
     }
 
+# Create/Update in Eloquent
+
+## "Magic" methods: FirstOrCreate() and other 2-in-1s
+
+There are two other methods you may use to create models by mass assigning attributes:  firstOrCreate and firstOrNew. The firstOrCreate method will attempt to locate a database record using the given column / value pairs. If the model can not be found in the database, a record will be inserted with the attributes from the first parameter, along with those in the optional second parameter. [Laravel docs](https://laravel.com/docs/5.7/eloquent#other-creation-methods)
+
+    function store(Request $request)
+    {
+        $article = Article::where('title', $request->title)->first();
+        if(!$article){
+            $article = Article::create([
+                'title' => $request->title,
+                'article_text' => $request->article_text
+            ]);
+        }
+
+        // some actions with the article
+        $article->chapters()->create($request->chapters);
+    }
+
+It can be replaced by:
+
+    function store(Request $request)
+    {
+        $article = Article::firstOrCreate(['title' => $request->title], ['article_text' => $request->article_text]);
+
+        // some actions with the article
+        $article->chapters()->create($request->chapters);
+    }
+
+    function store(Request $request)
+    {
+        $article = Article::firstOrNew(['title' => $request->title], ['article_text' => $request->article_text]);
+        $article->field = $value;
+        $article->save();
+
+        // some actions with the article
+        $article->chapters()->create($request->chapters);
+    }
+
+updateOrCreate updates an existing model or create a new model if none exists.
+
+    function store(Request $request)
+    {
+        $article = Article::where('title', $request->title)->where('user_id', auth()->id()->first();
+        if($article){
+            $article->update(['article_text' => $request-article_text]);
+        }else{
+            $article = Article::create([
+                'title' => $request->title,
+                'article_text' => $request->article_text.
+                'user_id' => auth()->id
+            ]);
+        }
+
+        $article = Article::updateOrCreate(['title' => $request->title, 'user_id' => auth()->id()]);
+
+        // some actions with the article
+        $article->chapters()->create($request->chapters);
+    }
+
+It can be replaced by:
+
+        function store(Request $request)
+    {
+        $article = Article::updateOrCreate(['title' => $request->title, 'user_id' => auth()->id()],
+        ['article_text' => $request->article_text]);
+
+        // some actions with the article
+        $article->chapters()->create($request->chapters);
+    }
