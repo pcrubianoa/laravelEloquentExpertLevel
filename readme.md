@@ -88,3 +88,15 @@ Shorcut to create a model instance with migration,resource controller and factor
 Display and describe the command's available arguments and options:
 
     php artisan make:model --help
+
+
+## Singular or Plural? What about multiple words?
+
+What | How | Good | Bad
+------------ | ------------- | ------------- | -------------
+Controller | singular | ArticleController | ~~ArticlesController~~
+Model | singular | User | ~~Users~~
+Table | plural | article_comments | ~~article_comment, articleComments~~
+Migration | - | 2017_01_01_000000_create_articles_table | ~~2017_01_01_000000_articles~~
+
+Read more naming conventions [Laravel best practices](https://github.com/alexeymezenin/laravel-best-practices/blob/master/README.md#follow-laravel-naming-conventions)
