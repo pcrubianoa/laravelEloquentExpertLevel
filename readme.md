@@ -238,7 +238,7 @@ It can be replaced by:
         $article->chapters()->create($request->chapters);
     }
 
-updateOrCreate updates an existing model or create a new model if none exists.
+`updateOrCreate` updates an existing model or create a new model if none exists.
 
     function store(Request $request)
     {
@@ -269,3 +269,61 @@ It can be replaced by:
         // some actions with the article
         $article->chapters()->create($request->chapters);
     }
+
+## Model Observers: "listening" to record changes 
+
+Observers are used to group event listeners for a model, for create a new observer run:
+
+    php artisan make:observer ArticleObserver --model=Article
+
+Register the observer in the AppServiceProvider:
+
+    <?php
+
+    namespace App\Providers;
+
+    use App\Article;
+    use App\Observers\UserObserver;
+    use Illuminate\Support\ServiceProvider;
+
+    class AppServiceProvider extends ServiceProvider
+    {
+        /**
+        * Bootstrap any application services.
+        *
+        * @return void
+        */
+        public function boot()
+        {
+            Article::observe(ArticleObserver::class);
+        }
+
+        /**
+        * Register the service provider.
+        *
+        * @return void
+        */
+        public function register()
+        {
+            //
+        }
+    }
+
+Article model:
+
+    public function store(Request $request)
+    {
+        Article::create($request->all());
+        return redirect()->route('articles.index');
+    }
+
+ArticleObserver:
+
+    public function createdArticle(Article $article)
+    {
+        info('Article is saved');
+    }
+
+Every time an article is created, we will have a message in log.
+
+    [2018-09-19 20:15:26] local.INFO: Article is saved
