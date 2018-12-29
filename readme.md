@@ -448,3 +448,71 @@ then we call factory in  `UserTableSeeder`. We can also specify the number of re
             factory(App\User::class, 50)->create();
         }
     }
+
+## Seeds and Factories with Relationships
+
+Define relationship:
+
+    public function up()
+    {
+        Schema::create('articles', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title');
+            $table->text('article_text');
+            $table->unsignedInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->timestamps();
+        });
+    }
+
+User factory:
+
+    <?php
+
+    use Faker\Generator as Faker;
+
+
+    $factory->define(App\User::class, function (Faker $faker) {
+        return [
+            'name' => $faker->name,
+            'email' => $faker->unique()->safeEmail,
+            'email_verified_at' => now(),
+            'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
+            'remember_token' => str_random(10),
+        ];
+    });
+
+Articles factory:
+
+    <?php
+
+    use Faker\Generator as Faker;
+
+
+    $factory->define(App\User::class, function (Faker $faker) {
+        return [
+            'title' => $faker->text(50),
+            'article_text' => $faker->text(500),
+        ];
+    });
+
+In `UsertableSeeder` use saveMany method:
+
+    <?php
+
+    use Illuminate\Database\Seeder;
+
+    class UserTableSeeder extends Seeder
+    {
+        /**
+        * Run the database seeds.
+        *
+        * @return void
+        */
+        public function run()
+        {
+            factory(App\User::class, 50)->create()->each(function($user){
+                $user->articles()->saveMany(factory(App\Article::class, 3)->make());
+            });
+        }
+    }
