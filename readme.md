@@ -524,4 +524,23 @@ una descripcion, los metodos y el tipo de valor que retornan, los parametros que
 
 https://laravel.com/api/5.7/Illuminate/Database/Eloquent/Model.html
 
+# Querying and Filtering Data Effectively
+
+## Advanced find() and all(): Methods and Parameters 
+
+`all(array|mixed $columns = ['*'])`
+Get all of the models from the database.
+
+    $user = User::all();
+    $user = User::all(['name', 'id']);
+
+`find(array|mixed $columns = ['*'])`
+these methods return a single model instance.
+
+    $user = User::find(1);
+    $user = User::find(1, 2);
+    $user = User::find([1, 2, 3], ['name']);
+
+    $user = User::findOrFail(1);
+    $user = User::where('email', 'example@mail.com')->firstOrFail();
 
