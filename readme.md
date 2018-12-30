@@ -519,8 +519,8 @@ In `UsertableSeeder` use saveMany method:
 
 ## Check Methods/Properties in Eloquent API Docs 
 
-En la documentacion se encuentra toda la informacion del API de  eloquent y que podemos trabajar desde los modelos. 
-una descripcion, los metodos y el tipo de valor que retornan, los parametros que reciben y Traits disponibles.
+In the documentation you will find all the information of the eloquent API and that we can work from the models.
+a description, the methods and the type of value that they return, the parameters they receive and Traits available.
 
 https://laravel.com/api/5.7/Illuminate/Database/Eloquent/Model.html
 
@@ -544,3 +544,7 @@ these methods return a single model instance.
     $user = User::findOrFail(1);
     $user = User::where('email', 'example@mail.com')->firstOrFail();
 
+## WhereX Magic Methods for Fields and Dates 
+
+    $user = User::where('email', 'example@mail.com')->firstOrFail();
+    $user = User::whereEmail('example@mail.com')->get();
