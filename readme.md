@@ -516,3 +516,12 @@ In `UsertableSeeder` use saveMany method:
             });
         }
     }
+
+## Check Methods/Properties in Eloquent API Docs 
+
+En la documentacion se encuentra toda la informacion del API de  eloquent y que podemos trabajar desde los modelos. 
+una descripcion, los metodos y el tipo de valor que retornan, los parametros que reciben y Traits disponibles.
+
+https://laravel.com/api/5.7/Illuminate/Database/Eloquent/Model.html
+
+
