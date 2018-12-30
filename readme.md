@@ -548,3 +548,21 @@ these methods return a single model instance.
 
     $user = User::where('email', 'example@mail.com')->firstOrFail();
     $user = User::whereEmail('example@mail.com')->get();
+
+    $user = User::where('created_at', '2019-12-27 11:28:29')->get();
+    $user = User::whereDate('created_at', '2019-12-27')->get();
+    $user = User::whereYear('created_at', '2019')->get();
+    $user = User::whereMonth('created_at', '09')->get();
+    $user = User::whereDay('created_at', '20')->get();
+    $user = User::whereTime('created_at', '20:15:05')->get();
+    $user = User::whereCreatedAt('20:15:05')->get();
+
+    More wherre cluses: 
+    whereBetween
+    whereNotBetween
+    whereIn / whereNotIn
+    whereNull / whereNotNull
+    whereDate / whereMonth / whereDay / whereYear / whereTime
+    whereColumn
+
+    https://laravel.com/docs/5.7/queries#where-clauses
