@@ -566,3 +566,63 @@ these methods return a single model instance.
     whereColumn
 
     https://laravel.com/docs/5.7/queries#where-clauses
+
+ ## Brackets to Eloquent: (A and B) or (C and D) 
+
+if we have and-or mix in SQL query, like this:
+
+    public function index()
+    {
+        $articles = Article::where('user_id', 1)
+        ->whereYear('created_at', 2018)
+        ->orwhereYear('update_at', 2018)
+        ->get();
+
+    return view('articles.index', compact('articles'));
+    }
+
+We can dispaly raw sql query with `toSql()` method;
+
+    public function index()
+    {
+        $articles = Article::where('user_id', 1)
+        ->whereYear('created_at', 2018)
+        ->orwhereYear('update_at', 2018)
+        ->toSql();
+        dd($articles);
+
+    return view('articles.index', compact('articles'));
+    }
+
+we have the follow result. The order will be incorrect.
+
+    "select * from `articles` where `user_id` = ? and year(`created_at`) = ? or year(`updated_at`) = ?"
+
+The right way is using closure functions as sub-queries:
+
+    public function index()
+    {
+        $articles = Article::where('user_id', 1)
+        ->where(function($query){
+        return $query->whereYear('created_at', 2018)
+            ->orwhereYear('update_at', 2018);
+        })->get();
+
+    return view('articles.index', compact('articles'));
+    }
+
+    public function index()
+    {
+        $articles = Article::where('user_id', 1)
+        ->where(function($query){
+        return $query->whereYear('created_at', 2018)
+            ->orwhereYear('update_at', 2018);
+        })->toSql();
+        dd($articles);
+
+    return view('articles.index', compact('articles'));
+    }
+
+Now, the result 
+
+    "select * from `articles` where `user_id` = ? and (year(`created_at`) = ? or year(`updated_at`) = ?)"
