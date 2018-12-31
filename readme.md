@@ -581,7 +581,7 @@ if we have and-or mix in SQL query, like this:
     return view('articles.index', compact('articles'));
     }
 
-We can display raw sql query with `toSql()` method;
+We can display raw query sql with `toSql()` method;
 
     public function index()
     {
