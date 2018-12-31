@@ -578,10 +578,10 @@ if we have and-or mix in SQL query, like this:
         ->orwhereYear('update_at', 2018)
         ->get();
 
-    return view('articles.index', compact('articles'));
+        return view('articles.index', compact('articles'));
     }
 
-We can display raw query sql with `toSql()` method;
+We can display raw query sql with `toSql()` method:
 
     public function index()
     {
@@ -591,7 +591,7 @@ We can display raw query sql with `toSql()` method;
         ->toSql();
         dd($articles);
 
-    return view('articles.index', compact('articles'));
+        return view('articles.index', compact('articles'));
     }
 
 we have the follow result. The order will be incorrect.
@@ -608,7 +608,7 @@ The right way is using closure functions as sub-queries:
             ->orwhereYear('update_at', 2018);
         })->get();
 
-    return view('articles.index', compact('articles'));
+        return view('articles.index', compact('articles'));
     }
 
     public function index()
@@ -620,9 +620,181 @@ The right way is using closure functions as sub-queries:
         })->toSql();
         dd($articles);
 
-    return view('articles.index', compact('articles'));
+        return view('articles.index', compact('articles'));
     }
 
 Now, the result 
 
     "select * from `articles` where `user_id` = ? and (year(`created_at`) = ? or year(`updated_at`) = ?)"
+
+## Query Scopes: Where Conditions Applied Globally
+
+Global scopes allow you to add constraints to all queries for a given model.
+
+    public function index()
+    {
+        $articles = Article::where('created_at', '>', now()->subDays(30)->get());
+        return view('articles.index', compact('articles'));
+    }
+
+    public function search(Reques $request)
+    {
+        $articles = Article::where('created_at', '>', now()->subDays(30))
+            ->where('user_id', $request->user_id)
+            ->get();
+
+        return view('articles.index', compact('articles'));
+    }
+
+
+    <?php
+
+    namespace App;
+
+    use Illuminate\Database\Eloquent\Model;
+
+    class Article extends Model
+    {
+        protected $fillable = ['title', 'article_text', 'user_id'];
+
+        public function scopeNewest($query)
+        {
+            return $query->where('created_at', '>', now()->subDays(30));
+        }
+    }
+
+
+    public function index()
+    {
+        $articles = Article::newest()->get());
+        return view('articles.index', compact('articles'));
+    }
+
+    public function search(Reques $request)
+    {
+        $articles = Article::newest()
+            ->where('user_id', $request->user_id)
+            ->get();
+
+        return view('articles.index', compact('articles'));
+    }
+
+Global scopes
+
+    public function index()
+    {
+        $articles = Article::where('user_id', 1)->get());
+        return view('articles.index', compact('articles'));
+    }
+
+    public function search(Reques $request)
+    {
+        $articles = Article::where('user_id', 1)
+            ->where('user_id', $request->user_id)
+            ->get();
+
+        return view('articles.index', compact('articles'));
+    }
+
+    public function edit($article_id)
+    {
+        $article = Article::where('user_id', 1)
+        ->find($article_id);
+        return view('articles.index', compact('article'));
+    }
+
+
+    <?php
+
+    namespace App;
+
+    use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\Builder;
+
+    class Article extends Model
+    {
+        /**
+        * The "booting" method of the model.
+        *
+        * @return void
+        */
+        protected static function boot()
+        {
+            parent::boot();
+
+            static::addGlobalScope('user_filter', function (Builder $builder) {
+                $builder->where('user_id', 1);
+            });
+        }
+    }
+
+
+        public function index()
+    {
+        $articles = Article::all();
+        return view('articles.index', compact('articles'));
+    }
+
+    public function search(Reques $request)
+    {
+        $articles = Article::where('user_id', $request->user_id)
+            ->get();
+
+        return view('articles.index', compact('articles'));
+    }
+
+    public function edit($article_id)
+    {
+        $article = Article::find($article_id);
+        return view('articles.index', compact('article'));
+    }
+
+
+    <?php
+
+    namespace App\Scopes;
+
+    use Illuminate\Database\Eloquent\Scope;
+    use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\Builder;
+
+    class ArticleUserScope implements Scope
+    {
+        /**
+        * Apply the scope to a given Eloquent query builder.
+        *
+        * @param  \Illuminate\Database\Eloquent\Builder  $builder
+        * @param  \Illuminate\Database\Eloquent\Model  $model
+        * @return void
+        */
+        public function apply(Builder $builder, Model $model)
+        {
+            $builder->where('user_id', 1);
+        }
+    }
+
+
+    <?php
+
+    namespace App;
+
+    use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\Builder;
+
+    class Article extends Model
+    {
+        /**
+        * The "booting" method of the model.
+        *
+        * @return void
+        */
+        protected static function boot()
+        {
+            parent::boot();
+
+            static::addGlobalScope(new ArticleUserScope);
+        }
+    }
+
+
+    
