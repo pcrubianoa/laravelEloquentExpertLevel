@@ -796,5 +796,66 @@ Global scopes
         }
     }
 
+## Eloquent when(): More Elegant if-statement 
 
-    
+if we have the following logic with if conditinal:
+
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Article;
+    use Illuminate\Http\Request;
+
+    class ArticleController extends Controller
+    {
+        public function index()
+        {
+            $articles = Article::all();
+            return view('articles.index', compact('articles'));
+        }
+
+        public function search()
+        {
+            $query = Article::query();
+            if(request('user_id')){
+                $query->where('user_id', request('user_id'));
+            }
+            if(request('title')){
+                $query->where('title', request('title'));
+            }
+            $articles = $query->get();
+
+            return view('articles.index', compact('articles'));
+        }
+    }
+
+We can use the when method to replace the conditional if:
+
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Article;
+    use Illuminate\Http\Request;
+
+    class ArticleController extends Controller
+    {
+        public function index()
+        {
+            $articles = Article::all();
+            return view('articles.index', compact('articles'));
+        }
+
+        public function search()
+        {
+            $articles = Article::when(requet('user_id'), function($query){
+                return $query->where('user_id', request('user_id'));
+            })->when(request('title'), function($query){
+                return $query->where('title', request('title'))
+            })->get();
+
+
+            return view('articles.index', compact('articles'));
+        }
+    }
