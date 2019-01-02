@@ -1180,7 +1180,7 @@ Post model:
         }
     }
 
-PostController:
+PostsController:
 
     public function store(Request $request)
     {
@@ -1200,16 +1200,100 @@ PostController:
 
 One To Many (Polymorphic)
 
-posts
----
-- id
-- title
+| **posts** |
+|----------|
+| id |
+| title |
 
+| **products** |
+|----------|
+| id |
+| name |
 
-## w Advanced Pivot Tables in Many-to-Many 
+| **photos** |
+|----------|
+| id |
+| filename |
 
-## HasManyThrough Relations 
+| **imageables**|
+|---------|
+| photo_id |
+| imageable_id |
+| imageable_type |
 
-## Creating Records with Relationships 
+    Schema::create('imageables', function (Blueprint $table) {
+        $table->unsignedInteger('photo_id');
+        $table->foreign('photo_id')->references('id')->on('photos');
+        $table->unsignedInteger('imageable_id');
+        $table->string('imageable_type');
+    });
 
-## Querying Records with Relationships 
+Photo model:
+
+    class Photo extends model
+    {
+        protected $fillable = ['filename'];
+
+        public function products()
+        {
+            return $this->morphedByMany('App\Product', 'imageable');
+        }
+
+        public function posts()
+        {
+            return $this->morphedByMany('App\Post', 'imageable');
+        }
+    }
+
+Product model:
+
+    class Product extends model
+    {
+        protected $fillable = ['title'];
+
+        public function photos()
+        {
+            return $this->morphedByMany('App\Photo', 'imageable');
+        }
+    }
+
+Post model:
+
+    class Post extends model
+    {
+        protected $fillable = ['title'];
+
+        public function photos()
+        {
+            return $this->morphedByMany('App\Photo', 'imageable');
+        }
+    }
+
+Imageable model:
+
+    class Imageable extends model
+    {
+        public $timestamps = false;
+        protected $fillable = ['photo_id', 'imageable_id', 'iamgeable_type'];
+    }
+
+PostController:
+
+    public function store(Request $request)
+    {
+        $post = Post::create($request->only(['title']));
+        $photos = explode(",", $request->get('photos')) ;
+        foreach ($photos as $filename) {
+            $photo = Photo::Create([
+                'filename' => $filename
+            ]);
+
+            Imageable::create([
+                'photo_id' => $photo->id
+                'imageable_id' => $post->id,
+                'imageable_type' => 'App\Post',
+            ]);
+
+        return redirect()->route('posts.index');
+    }
+
