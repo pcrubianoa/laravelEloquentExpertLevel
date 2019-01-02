@@ -1338,6 +1338,8 @@ PostController:
         }
     }
 
+`DatabaseSeeder`:
+
     public function run()
     {
         \App\Role::create(['name' => 'Administrator']);
@@ -1360,9 +1362,130 @@ PostController:
 
 ## HasManyThrough Relations 
 
+    Schema::create('users', function (Blueprint $table) {
+        $table->unsignedInteger('role_id');
+        $table->foreign('role_id')->references('id')->on('roles');
+        $table->string('name');
+        $table->string('email')->unique();
+        $table->timestamp('email_verified_at')->nullable();
+        $table->string('password');
+        $table->rememberToken();
+        $table->timestamps();
+    });
 
+    Schema::create('roles', function (Blueprint $table) {
+        $table->increments('id');
+        $table->string('name');
+        $table->timestamps();
+    });
 
+    Schema::create('posts', function (Blueprint $table) {
+        $table->increments('id');
+        $table->unsignedInteger('user_id');
+        $table->foreign('user_id')->references('id')->on('users');
+        $table->string('title');
+        $table->text('post_text');
+        $table->timestamps();
+    });
 
-## Creating Records with Relationships 
+User model:
 
-## Querying Records with Relationships 
+    class User extends Authenticatable
+    {
+        use Notifiable;
+
+        protected $fillable = [
+            'name','email','password', 'role_id',
+        ];
+
+        protected $hidden = [
+            'password','remember_token',
+        ];
+
+        public function role()
+        {
+            return $this->belongsTo(Role::class);
+        }
+
+        public function posts()
+        {
+            return $this->hasMany(Post::class);
+        }
+    }
+
+Role model:
+
+    class Role extends model
+    {
+        protected $fillable = ['name'];
+
+        public function users()
+        {
+            return $this->hasMany(User::class);
+        }
+
+        public function posts()
+        {
+            return $this->hasManyThrough(Post::class, User::class);
+        }
+    }
+
+Post model:
+
+    class Post extends model
+    {
+        protected $fillable = ['user_id', 'title', 'post_text'];
+
+        public function user()
+        {
+            return $this->belongsTo(User::class);
+        }
+    }
+
+`DatabaseSeeder`:
+
+    public function run()
+    {
+        \App\Role::create(['name' => 'Administrator']);
+        \App\Role::create(['name' => 'Editor']);
+        \App\Role::create(['name' => 'Author']);
+
+        $user = \App\User::Create([
+            'role_id' => 1,
+            'name' => 'Administrator',
+            'email' => admin@admin.com,
+            'password' => bvrypt('password');
+        ]);
+        $user = \App\User::Create([
+            'role_id' => 2,
+            'name' => 'Editor',
+            'email' => editor@editor.com,
+            'password' => bvrypt('password');
+        ]);
+        $user = \App\User::Create([
+            'role_id' => 3,
+            'name' => 'Author',
+            'email' => author@author.com,
+            'password' => bvrypt('password');
+        ]);
+
+        for ($i=1; $i <= 10; $i++) {
+            \App\Post::create([
+                'user_id' => rand(1, 3),
+                'title' => str_random(10),
+                'post_text' => str_random(200),
+            ]);
+        }
+    }
+
+`HomeController`:
+
+class HomeController extends Controller
+{
+    public function index()
+    {
+        $roles = Role::with('users.posts')->get();
+        return view('home', compact('roles'));
+    }
+}
+
