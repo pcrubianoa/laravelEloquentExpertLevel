@@ -1504,4 +1504,28 @@ public function store(Request $request)
     return redirect()->route('books.index');
 }
 
+## Querying Records with Relationships
 
+    class Book extends Model
+    {
+        protexted $fillable = ['author_id', 'title'];
+
+        public function author()
+        {
+            return $this->belongsTo(Author::class);
+        }
+
+        public function ratings()
+        {
+            return $this->hasMany(Rating::class);
+        }
+    }
+
+    public function index()
+    {
+        Author::whereHas('books', function($query){
+            $query->where('title', 'like', '%b%');
+        })->get()->dd();
+
+        return view('books.index', compact('books'));
+    }
