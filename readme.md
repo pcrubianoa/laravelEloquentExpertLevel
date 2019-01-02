@@ -1110,35 +1110,43 @@ photos
 posts
 products
 
-posts_photos
----
-- id
-- filename
-- post_id
-- timestamps
+| **Tables** |
+|----------|
+| migrations |
+| photos |
+| posts |
+| products |
 
-products_photos
----
-- id 
-- filename
-- product_id
-- timestamps
 
-users_photos
----
-- id
-- filename
-- use_id
-- timestamps
+| **posts_photos** |
+|----------|
+| id |
+| filename |
+| post_id |
+| timestamps |
 
-photos
----
-- id
-- filename
-- photoable_id
-- photoable_type
-- user_id
-- timestamps
+| **products_photos** |
+|----------|
+| id  |
+| filename |
+| product_id |
+| timestamps |
+
+| **users_photos** |
+|----------|
+| id |
+| filename |
+| use_id |
+| timestamps |
+
+| **photos** |
+|----------|
+| id |
+| filename |
+| photoable_id |
+| photoable_type |
+| user_id |
+| timestamps |
 
     Schema::create('photos', function (Blueprint $table) {
         $table->increments('id');
@@ -1188,3 +1196,20 @@ PostController:
         return redirect()->route('posts.index');
     }
 
+## Polymorphic Many-to-Many Relations 
+
+One To Many (Polymorphic)
+
+posts
+---
+- id
+- title
+
+
+## w Advanced Pivot Tables in Many-to-Many 
+
+## HasManyThrough Relations 
+
+## Creating Records with Relationships 
+
+## Querying Records with Relationships 
