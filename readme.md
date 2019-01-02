@@ -1028,3 +1028,38 @@ The contains method determines whether the collection contains a given item:
             return strlen($user->name) > 17;
         });
     }
+
+ ## Methods for Math Calculations 
+
+    public function index()
+    {
+        $articles = Article::all();
+        echo 'Total articles' . $articles->count() . '<hr />';
+        echo 'Total word written: ' . $articles->sum('word_count') . '<hr />';
+        echo 'Minimun word count: ' . number_format($articles->min('word_count', 2)) . '<hr />';
+        echo 'Maximun word count: ' . number_format($articles->max('word_count', 2)) . '<hr />';
+        echo 'Average word count: ' . number_format($articles->avg('word_count', 2)) . '<hr />';
+        echo 'Median word count: ' . number_format($articles->median('word_count', 2)) . '<hr />';
+        echo 'Most often word count: ' . implode(', ' $articles->mode('word_count')) . '<hr />';
+    }
+
+Calculations:
+
+count()
+The count method returns the total number of items in the collection.
+
+avg()
+The avg method returns the average value of a given key.
+
+max()
+The max method returns the maximum value of a given key.
+
+median()
+The median method returns the median value of a given key.
+
+min()
+The min method returns the minimum value of a given key.
+
+sum()
+The sum method returns the sum of all items in the collection.
+
