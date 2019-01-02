@@ -36,7 +36,7 @@
 ## Advanced Eloquent Relationships
  - Polymorphic Relations Explained 
  - Polymorphic Many-to-Many Relations 
- - w Advanced Pivot Tables in Many-to-Many 
+ - Advanced Pivot Tables in Many-to-Many 
  - HasManyThrough Relations 
  - Creating Records with Relationships 
  - Querying Records with Relationships 
@@ -1298,7 +1298,7 @@ PostController:
     }
 
 
-## w Advanced Pivot Tables in Many-to-Many 
+## Advanced Pivot Tables in Many-to-Many 
 
     Schema::create('roles', function (Blueprint $table) {
         $table->increments('id');
@@ -1358,3 +1358,11 @@ PostController:
         }
     }
 
+## HasManyThrough Relations 
+
+
+
+
+## Creating Records with Relationships 
+
+## Querying Records with Relationships 
