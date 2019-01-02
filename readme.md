@@ -324,7 +324,7 @@ ArticleObserver:
         info('Article is saved');
     }
 
-Every time an article is created, we will have a message in log.
+Every time an article is created, you will have a message in log.
 
     [2018-09-19 20:15:26] local.INFO: Article is saved
 
@@ -406,7 +406,7 @@ Register seeder in `DatabaseSeeder`:
         }
     }
 
-Finally we run seeder :
+Finally you run seeder :
 
     php artisan db:seed
 
@@ -430,7 +430,7 @@ Laravel uses Faker that is a PHP library that generates fake data. [Read more](h
         ];
     });
 
-then we call factory in  `UserTableSeeder`. We can also specify the number of records:
+then you call factory in  `UserTableSeeder`. You can also specify the number of records:
 
     <?php
 
@@ -519,7 +519,7 @@ In `UsertableSeeder` use saveMany method:
 
 ## Check Methods/Properties in Eloquent API Docs 
 
-In the documentation you will find all the information of the eloquent API and that we can work from the models.
+In the documentation you will find all the information of the eloquent API and that you can work from the models.
 a description, the methods and the type of value that they return, the parameters they receive and Traits available.
 
 https://laravel.com/api/5.7/Illuminate/Database/Eloquent/Model.html
@@ -569,7 +569,7 @@ these methods return a single model instance.
 
  ## Brackets to Eloquent: (A and B) or (C and D) 
 
-if we have and-or mix in SQL query, like this:
+if you have and-or mix in SQL query, like this:
 
     public function index()
     {
@@ -580,8 +580,7 @@ if we have and-or mix in SQL query, like this:
 
         return view('articles.index', compact('articles'));
     }
-
-We can display raw query sql with `toSql()` method:
+You can display raw query sql with `toSql()` method:
 
     public function index()
     {
@@ -594,7 +593,7 @@ We can display raw query sql with `toSql()` method:
         return view('articles.index', compact('articles'));
     }
 
-we have the follow result. The order will be incorrect.
+You have the follow result. The order will be incorrect.
 
     "select * from `articles` where `user_id` = ? and year(`created_at`) = ? or year(`updated_at`) = ?"
 
@@ -798,7 +797,7 @@ Global scopes
 
 ## Eloquent when(): More Elegant if-statement 
 
-if we have the following logic with if conditinal:
+if you have the following logic with if conditinal:
 
     <?php
 
@@ -830,7 +829,7 @@ if we have the following logic with if conditinal:
         }
     }
 
-We can use the when method to replace the conditional if:
+You can use the when method to replace the conditional if:
 
     <?php
 
@@ -867,7 +866,7 @@ The orderBy method orders elements by the given key:
     $articles = Article::all()->orderBy("name");
     $articles = Article::orderBy('name')->get();
 
-we can replace the `orderBy()` method by `shortBy()`:
+You can replace the `orderBy()` method by `shortBy()`:
 
         public function index()
         {
@@ -875,7 +874,7 @@ we can replace the `orderBy()` method by `shortBy()`:
             return view('users.index', compact('users'))
         }
 
-We can use the collections with `all()` and use the sortBy method, by default `sortBy` orders the elements ascending:
+You can use the collections with `all()` and use the sortBy method, by default `sortBy` orders the elements ascending:
 
         public function index()
         {
@@ -883,10 +882,46 @@ We can use the collections with `all()` and use the sortBy method, by default `s
             return view('users.index', compact('users'))
         }
 
-to order the elements in descending order we use `sortByDesc()`:
+to order the elements in descending order you use `sortByDesc()`:
 
         public function index()
         {
             $user = User::all()->sortByDesc('days_active');
             return view('users.index', compact('users'))
         }
+
+## Raw Database Queries with Examples
+
+To create a raw expression, you may use the DB::raw method:
+
+    public function index()
+    {
+        $users = User::select(DB::raw('id, name, email, created_at, DATEDIFF(updated_at, created_at) as days_Active))->get();
+
+        return view('users.index', compact('users'));
+    }
+
+    public function index()
+    {
+        $users = User::selectRaw('id, name, email, created_at, DATEDIFF(updated_at, created_at) as days_Active)->get();
+
+        return view('users.index', compact('users'));
+    }
+
+    public function index()
+    {
+        $users = User::select(DB::raw('id, name, email, created_at, DATEDIFF(updated_at, created_at) as days_Active))
+        ->whereRaw('DATEDIFF(updated_at, created_at) > 300')
+        ->get();
+
+        return view('users.index', compact('users'));
+    }
+
+    public function index()
+    {
+        $users = User::select(DB::raw('id, name, email, created_at, DATEDIFF(updated_at, created_at) as days_Active))
+        ->orderByRaw('DATEDIFF(updated_at, created_at) desc')
+        ->get();
+
+        return view('users.index', compact('users'));
+    }
