@@ -859,3 +859,34 @@ We can use the when method to replace the conditional if:
             return view('articles.index', compact('articles'));
         }
     }
+
+## Ordering by Relationship: orderBy vs sortBy 
+
+The orderBy method orders elements by the given key:
+
+    $articles = Article::all()->orderBy("name");
+    $articles = Article::orderBy('name')->get();
+
+we can replace the `orderBy()` method by `shortBy()`:
+
+        public function index()
+        {
+            $user = User::orderBy('name')->get();
+            return view('users.index', compact('users'))
+        }
+
+We can use the collections with `all()` and use the sortBy method, by default `sortBy` orders the elements ascending:
+
+        public function index()
+        {
+            $user = User::all()->sortBy('days_active');
+            return view('users.index', compact('users'))
+        }
+
+to order the elements in descending order we use `sortByDesc()`:
+
+        public function index()
+        {
+            $user = User::all()->sortByDesc('days_active');
+            return view('users.index', compact('users'))
+        }
