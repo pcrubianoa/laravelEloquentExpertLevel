@@ -1297,3 +1297,64 @@ PostController:
         return redirect()->route('posts.index');
     }
 
+
+## w Advanced Pivot Tables in Many-to-Many 
+
+    Schema::create('roles', function (Blueprint $table) {
+        $table->increments('id');
+        $table->string('name');
+        $table->timestamps();
+    });
+
+    Schema::create('role_user', function (Blueprint $table) {
+        $table->unsignedInteger('role_id');
+        $table->foreign('role_id')->references('id')->on('roles');
+        $table->unsignedInteger('user_id');
+        $table->foreign('user_id')->references('id')->on('users');
+        $table->boolen('approved')->default(0);
+        $table->timestamps();
+    });
+
+    class User extends Authenticatable
+    {
+        use Notifiable;
+
+        protected $fillable = [
+            'name','email','password',
+        ];
+
+        protected $hidden = [
+            'password','remember_token',
+        ];
+
+        public function roles()
+        {
+            return $this->belongsToMany(Role::class)->withTimestamps()->withPivot('approved');
+        }
+
+        public function approvedRoles()
+        {
+            return $this->belongsToMany(Role::class)->wherePivot('approved', 1);
+        }
+    }
+
+    public function run()
+    {
+        \App\Role::create(['name' => 'Administrator']);
+        \App\Role::create(['name' => 'Editor']);
+        \App\Role::create(['name' => 'Author']);
+
+        $user = \App\User::Create([
+            'name' => 'Administrator',
+            'email' => admin@admin.com,
+            'password' => bvrypt('password');
+        ]);
+        $user->roles()->attach(1, ['approved' => 1]);
+        $user->roles()->attach(2);
+
+        foreach($user->roles as $role) {
+            //info($role->name . '(time '.$role->pivot->created_at', approved: '. $role->pivot->approved.')');
+            info($role->name);
+        }
+    }
+
