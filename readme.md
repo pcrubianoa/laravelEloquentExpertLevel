@@ -1095,3 +1095,96 @@ The tap method passes the collection to the given callback, allowing you to "tap
             })
             ->chunk(3);
     }
+
+# Advanced Eloquent Relationships
+
+## Polymorphic Relations Explained 
+
+A polymorphic relationship allows the target model to belong to more than one type of model using a single association.
+
+One To One (Polymorphic)
+
+TABLES
+migrations
+photos
+posts
+products
+
+posts_photos
+---
+- id
+- filename
+- post_id
+- timestamps
+
+products_photos
+---
+- id 
+- filename
+- product_id
+- timestamps
+
+users_photos
+---
+- id
+- filename
+- use_id
+- timestamps
+
+photos
+---
+- id
+- filename
+- photoable_id
+- photoable_type
+- user_id
+- timestamps
+
+    Schema::create('photos', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('imageable_id')->unsigned();
+        $table->string('imageable_type');
+        $table->string('filename');
+        $table->timestamps();
+    });
+
+Photo model:
+
+    class Photo extends model
+    {
+        protected $fillable = ['imageable_id', 'imageable_type', 'filename'];
+
+        public function imageable()
+        {
+            return $this->morphTo();
+        }
+    }
+
+Post model:
+
+    class Post extends model
+    {
+        protected $fillable = ['title'];
+
+        public function photos()
+        {
+            return $this->morphMany('App\Photo', 'imageable');
+        }
+    }
+
+PostController:
+
+    public function store(Request $request)
+    {
+        $post = Post::create($request->only(['title']));
+        $photos = explode(",", $request->get('photos')) ;
+        foreach ($photos as $photo) {
+            Photo::Create([
+                'imageable_id' => $post->id,
+                'imageable_type' => 'App\Post',
+                'filename' => $photo
+            ]);
+        });
+        return redirect()->route('posts.index');
+    }
+
