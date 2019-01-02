@@ -954,3 +954,54 @@ A small example:
 
         return view('articles.index', compact('titles'));
     }
+
+## Methods for Fetching and Transforming 
+
+Some examples of the use of some collections methods:
+
+Controller:
+
+    public function index()
+    {
+        $articles = Article::all();
+        return view('articles.index', compact('articles'));
+    }
+
+    public function create()
+    {
+        $users = User::select(['name', 'id'])->get()
+        ->prepend(new User(['name' => '-- Please choose author --']));
+        return view('articles.create', compact('users'));
+    }
+
+View:
+
+    <select name="user_id" class="form-control">
+        @foreach
+            <option value="{{ $user->id }}">{{ $user->name }}</option>
+        @endforeach
+    </select>
+
+The shuffle method randomly shuffles the items in the collection:
+
+    $users = User::select(['name', 'id'])->get()->shuffle();
+
+The pluck method retrieves all of the values for a given key:
+
+    $users = User::pluck('name', 'id');
+
+The chunk method breaks the collection into multiple, smaller collections of a given size:
+
+    $users = User::select(['name', 'id'])->get()->shuffle()->chunk(3);
+
+The random method returns a random item from the collection:
+
+    $users = User::select(['name', 'id'])->get()->random();
+
+The contains method determines whether the collection contains a given item:
+
+    $users = User::select(['name', 'id'])->get()->random();
+    if ($users->contains('password', '$2y$10$TydfRTyjLAVB834GnsaY'))
+        dd('Not ready');
+
+[More available methods](https://laravel.com/docs/5.7/collections#available-methods)
