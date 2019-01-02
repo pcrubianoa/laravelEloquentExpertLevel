@@ -1489,3 +1489,19 @@ class HomeController extends Controller
     }
 }
 
+## Creating Records with Relationships 
+
+public function store(Request $request)
+{
+    $author = Author::firstOrCreate(['name' => $request->author]);
+
+    $titles = collect(explode(',', $request->titles))->map(function($record) {
+        return ['title' => $record];
+    })->toArray();
+
+    $author->books()->createMany($titles);
+
+    return redirect()->route('books.index');
+}
+
+
