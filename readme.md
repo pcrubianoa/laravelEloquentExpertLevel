@@ -925,3 +925,32 @@ To create a raw expression, you may use the DB::raw method:
 
         return view('users.index', compact('users'));
     }
+
+# Eloquent Collections and their Methods
+
+## Why You Need Collections and How to Use Them 
+
+Laravel collections are one of the most powerful provisions of the Laravel framework. They are what PHP arrays should be, but better. (scotch.io)
+The Eloquent collection object extends the Laravel base collection, so it naturally inherits dozens of methods used to fluently work with the underlying array of Eloquent models.
+
+A small example:
+
+    public function index()
+    {
+        $articles = Articles::all();
+
+        $titles = [];
+        foreach ($articles as $aticle){
+            if(strlen($article->title) > 40){
+                $titles[] = $article->title;
+            }
+        }
+
+        dd($articles->filter(function($article){
+            return strlen($article->title) > 40;
+        })->map(function($article){
+            return $article->title;
+        }));
+
+        return view('articles.index', compact('titles'));
+    }
