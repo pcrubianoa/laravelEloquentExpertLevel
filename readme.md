@@ -1005,3 +1005,26 @@ The contains method determines whether the collection contains a given item:
         dd('Not ready');
 
 [More available methods](https://laravel.com/docs/5.7/collections#available-methods)
+
+## Methods for Filtering with Callbacks
+
+    public function index()
+    {
+        $users = User::all()->each(function($user) {
+            if ($users->contains('password', '$2y$10$TydfRTyjLAVB834GnsaY')) {
+                info('User ' . $user->email . 'has not changed password');
+            }
+        });
+
+        $names = User::all()->map(function ($user) {
+            return strlen($user->name);
+        });
+
+        $names = User::all()->filter(function ($user) {
+            return strlen($user->name) > 17;
+        });
+
+        $names = User::all()->reject(function ($user) {
+            return strlen($user->name) > 17;
+        });
+    }
