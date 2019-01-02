@@ -1063,3 +1063,35 @@ The min method returns the minimum value of a given key.
 sum()
 The sum method returns the sum of all items in the collection.
 
+## Methods for Debugging
+
+dd()
+The dd method dumps the collection´s items and ends execution of the script.
+
+dump()
+The dump method dumps the collection´s items.
+
+tap()
+The tap method passes the collection to the given callback, allowing you to "tap" into the collection at a specific point and do something with the items.
+
+    public function index()
+    {
+        $users = User::select(['name', 'id'])
+            ->take(5)
+            ->get()
+            ->shuffle()
+            ->chunk(3);
+        dd($users);
+    }
+
+    public function index()
+    {
+        $users = User::select(['name', 'id'])
+            ->take(5)
+            ->get()
+            ->shuffle()
+            ->tap(function ($users) {
+                info($users->first());
+            })
+            ->chunk(3);
+    }
