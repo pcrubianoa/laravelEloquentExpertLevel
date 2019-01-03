@@ -1529,3 +1529,30 @@ public function store(Request $request)
 
         return view('books.index', compact('books'));
     }
+
+
+# Eloquent Performance
+
+## Laravel Debugbar: How to Measure Performance 
+
+Installation:
+
+    composer require barryvdh/laravel-debugbar --dev
+
+Example:
+
+    public function index()
+    {
+        $books = Book::with('author')
+            ->where('title', 'like', '%a%')
+            ->take(50)
+            ->get();
+
+        return view('books.index', compact('books'));
+    }
+    
+Queries output in debugbar:
+
+    select * from `books` where `title` like `%a%` limit 50 (1.46ms)
+
+[Laravel Debugbar Github](https://github.com/barryvdh/laravel-debugbar)
