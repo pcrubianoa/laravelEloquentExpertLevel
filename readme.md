@@ -1617,3 +1617,48 @@ books/test2
 books/test3
 
     Did nothing in 0.07549003448486 seconds
+
+## N+1 Problem and Eager Loading: Be Careful with Eloquent 
+
+Controller:
+
+    public function index()
+    {
+        $books = Book::where('title', 'like', '%a%')
+            ->take(100)
+            ->get();
+
+        return view('books.index', compact('books'));
+    }
+
+view:
+
+    @foreach ($books as $book)
+        <tr>
+            <td>{{ $book->title }}</td>
+            <td>{{ $book->author->name }}</td>
+        </tr>
+    @endforeach
+
+Laravel debugbar output:
+
+    Queries 102 - 3.68s
+
+Controller:
+
+    public function index()
+    {
+        $books = Book::with('author')
+            ->where('title', 'like', '%a%')
+            ->take(100)
+            ->get();
+
+        return view('books.index', compact('books'));
+    }
+
+Laravel debugbar output:
+
+    Queries 3 - 1.16s
+
+[Laravel N+1 Query Detector](https://github.com/beyondcode/laravel-query-detector)
+
