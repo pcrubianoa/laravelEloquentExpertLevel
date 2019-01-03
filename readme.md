@@ -1662,3 +1662,41 @@ Laravel debugbar output:
 
 [Laravel N+1 Query Detector](https://github.com/beyondcode/laravel-query-detector)
 
+## Caching in Eloquent
+
+    public function index()
+    {
+        $authors = Author::with('books')
+        ->take(20)
+        ->get();
+
+        return view(books.index, compact('authors'));
+    }
+
+    public function getBooksCountAttribute()
+    {
+        return $this->books->count();
+    }
+
+
+Laravel Debugbar output:
+
+    Queries 21 - 1.88s
+
+You can use `Cache::remember` to caching the model for fifteen minutes. You can cache properties and associations on your models that are automatically updated (and the cache invalidated) when the model (or associated model) is updated.
+
+Example:
+
+    public function index()
+    {
+        $authors = Author->take(20)->get();
+
+        return view(books.index, compact('authors'));
+    }
+
+    public function getBooksCountAttribute()
+    {
+        return Cache::remember('author-books-' . $this->id, 15, function(){
+            return $this->books->count();
+        });
+    }
