@@ -1556,3 +1556,64 @@ Queries output in debugbar:
     select * from `books` where `title` like `%a%` limit 50 (1.46ms)
 
 [Laravel Debugbar Github](https://github.com/barryvdh/laravel-debugbar)
+
+## erformance Test: Eloquent vs Query Builder vs SQL
+
+    public function test1()
+    {
+        $time_start = $this->microtime_float();
+
+        $books = Book::with('author')
+            ->where('title', 'like', '%a%')
+            ->get();
+
+        $time_end = $this->microtime_float();
+        $time = $time_end - $time_start;
+
+        return "Did nothing in $time seconds";
+    }
+
+    public function test2()
+    {
+        $time_start = $this->microtime_float();
+
+        $books = \DB::table('books')
+            ->join('authors', 'books.author_id', '=', 'authors.id')
+            ->where('title', 'like', '%a%')
+            ->get();
+
+        $time_end = $this->microtime_float();
+        $time = $time_end - $time_start;
+
+        return "Did nothing in $time seconds";
+    }
+
+    public function test3()
+    {
+        $time_start = $this->microtime_float();
+
+        $books = \DB::select("seelct * from books join authors on books.author_id = authors.id where title like %a%");
+
+        $time_end = $this->microtime_float();
+        $time = $time_end - $time_start;
+
+        return "Did nothing in $time seconds";
+    }
+
+    private function microtime_float()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return ((float)$usec + (float)$sec);
+    }
+
+books/test1
+
+    Did nothing in 0.40745592117310 seconds
+
+books/test2
+    
+    Did nothing in 0.05786395072937 seconds
+
+books/test3
+
+    Did nothing in 0.07549003448486 seconds
