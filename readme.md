@@ -1,10 +1,10 @@
 # Class Curriculum - laraveldaily (26 Dec 2018)
 
 ## Eloquent Model Options and Settings
- - Artisan Command make:model with (hidden) options 
- - Singular or Plural? What about multiple words? 
- - Saving a Model: $fillable or $guarded? 
- - Properties for Tables, Keys, Increments, Pages and Dates 
+ - [Artisan Command make:model with (hidden) options](#artisan-command-makemodel-with-hidden-options)
+ - [Singular or Plural? What about multiple words?](#singular-or-plural-what-about-multiple-words)
+ - [Saving a Model: $fillable or $guarded?](#saving-a-model-fillable-or-guarded)
+ - [Properties for Tables, Keys, Increments, Pages and Dates](#properties-for-tables-keys-increments-pages-and-dates)
 
 ## Create/Update in Eloquent
  -  "Magic" methods: FirstOrCreate() and other 2-in-1s 
