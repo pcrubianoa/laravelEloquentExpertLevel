@@ -1700,3 +1700,52 @@ Example:
             return $this->books->count();
         });
     }
+
+# Useful Packages to Extend Eloquent
+
+## spatie/laravel-medialibrary: Associate files with Eloquent models 
+
+Installation:
+
+    composer require "spatie/laravel-medialibrary:^7.0.0"
+    
+    php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="migrations"
+
+    php artisan migrate
+
+    php artisan storage:link
+
+Book model:
+
+    <?php
+
+    namespace App;
+
+    use Illuminate\Database\Eloquent\Model;
+    use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+    use Spatie\MediaLibrary\HasMedia\HasMedia;
+    //use Spatie\MediaLibrary\Models\Media;
+
+    class Book extends Model implements HasMedia
+    {
+        use HasMediaTrait;
+
+        protected $fillable = ['author_id', 'title'];
+
+        public function author()
+        {
+            return $this->belongsTo(Author::class);
+        }
+    }
+
+<img width="1680" alt="Login" src="medialibrary.png">
+
+## dimsav/laravel-translatable: Package for Multilingual Models
+
+## spatie/eloquent-sortable: Sortable Eloquent Models 
+
+## spatie/laravel-tags: Add Tags and Taggable Behavior 
+
+## owen-it/laravel-auditing: Record the Changes From Models 
+
+## michaeldyrynda/laravel-cascade-soft-deletes: Cascade Delete & Restore 
