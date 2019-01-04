@@ -1852,7 +1852,7 @@ This should look like this:
 
 <img width="1680" alt="Login" src="fullpath.png"> 
 
-Index book view:
+Index book view by adding the second parameter to `getFirstMediaUrl`:
 
     <tbody>
         @foreach ($books as $book)
