@@ -1709,11 +1709,63 @@ Installation:
 
     composer require "spatie/laravel-medialibrary:^7.0.0"
     
+You can publish the migration with:
+
     php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="migrations"
+
+After the migration has been published you can create the media-table by running the migrations:
 
     php artisan migrate
 
+This will create a media table:
+
+    Schema::create('media', function (Blueprint $table) {
+        $table->increments('id');
+        $table->morphs('model');
+        $table->string('collection_name');
+        $table->string('name');
+        $table->string('file_name');
+        $table->string('mime_type')->nullable();
+        $table->string('disk');
+        $table->unsignedInteger('size');
+        $table->json('manipulations');
+        $table->json('custom_properties');
+        $table->json('responsive_images');
+        $table->unsignedInteger('order_column')->nullable();
+        $table->nullableTimestamps();
+    });
+
+Create the symbolic link:
+
     php artisan storage:link
+
+Create Book view:
+
+    <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        Book title:
+        <input type="text" class="form-control" name="title" />
+        <br />
+
+        Author:
+        <select name="author_id" class="form-control">
+            @foreach ($authors as $author)
+                <option value="{{ $author->id }}">{{ $author->name }}</option>
+            @endforeach
+        </select>
+
+        Cover image:
+        <br />
+        <input type="file" name="cover_image" />
+        <br /><br />
+
+        <input type="submit" value="Save book" />
+    </form>
+
+This should look like this:
+
+<img width="1680" alt="Login" src="medialibrary.png">
 
 Book model:
 
@@ -1724,7 +1776,7 @@ Book model:
     use Illuminate\Database\Eloquent\Model;
     use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
     use Spatie\MediaLibrary\HasMedia\HasMedia;
-    //use Spatie\MediaLibrary\Models\Media;
+    use Spatie\MediaLibrary\Models\Media;
 
     class Book extends Model implements HasMedia
     {
@@ -1736,6 +1788,86 @@ Book model:
         {
             return $this->belongsTo(Author::class);
         }
+
+        public function registerMediaConversions(Media $media = null)
+        {
+            $this->addMediaConversion('thumb')
+                ->width(100)
+                ->height(100);
+        }
     }
 
-<img width="1680" alt="Login" src="medialibrary.png">
+BookController:
+
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Book;
+    use App\Author;
+    use Illuminate\Http\Request;
+
+    class BookController extends Controller
+    {
+        public function index()
+        {
+            $books = Book::with('author')->get();
+            return view('books.index', compact('books'));
+        }
+
+        public function create()
+        {
+            $authors = Author::all();
+            return view('books.create', compact('authors'));
+        }
+
+        public function store(Request $request)
+        {
+            $book = Book::create($request->all());
+
+            if ($request->hasFile('cover_image')) {
+                $book->addMediaFromRequest('cover_image')->toMediaCollection('cover_images');
+            }
+
+            return redirect()->route('books.index');
+        }
+    }
+
+
+Index book view:
+
+    <tbody>
+        @foreach ($books as $book)
+            <tr>
+                <td>{{ $book->title }}</td>
+                <td>{{ $book->author->name }}</td>
+                <td>
+                    <img src="{{ $book->getFirstMediaUrl('cover_images') }}">
+                </td>
+                </tr>
+        @endforeach
+    </tbody>
+
+This should look like this:
+
+<img width="1680" alt="Login" src="fullpath.png"> 
+
+Index book view:
+
+    <tbody>
+        @foreach ($books as $book)
+            <tr>
+                <td>{{ $book->title }}</td>
+                <td>{{ $book->author->name }}</td>
+                <td>
+                    <img src="{{ $book->getFirstMediaUrl('cover_images', 'thumb') }}">
+                </td>
+                </tr>
+        @endforeach
+    </tbody>
+
+This should look like this:
+
+<img width="1680" alt="Login" src="thumb.png">   
+
+[Associate files with Eloquent models - Github](https://github.com/spatie/laravel-medialibrary)

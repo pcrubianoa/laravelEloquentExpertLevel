@@ -15,7 +15,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        $books = Book::with('author')->get();
+        return view('books.index', compact('books'));
     }
 
     /**
@@ -37,7 +38,13 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $book = Book::create($request->all());
+
+        if ($request->hasFile('cover_image')) {
+            $book->addMediaFromRequest('cover_image')->toMediaCollection('cover_images');
+        }
+
+        return redirect()->route('books.index');
     }
 
     /**

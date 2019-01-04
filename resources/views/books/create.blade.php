@@ -28,7 +28,6 @@
                         <br /><br />
 
                         <input type="submit" value="Save book" />
-
                     </form>
                 </div>
             </div>
