@@ -1739,13 +1739,3 @@ Book model:
     }
 
 <img width="1680" alt="Login" src="medialibrary.png">
-
-## dimsav/laravel-translatable: Package for Multilingual Models
-
-## spatie/eloquent-sortable: Sortable Eloquent Models 
-
-## spatie/laravel-tags: Add Tags and Taggable Behavior 
-
-## owen-it/laravel-auditing: Record the Changes From Models 
-
-## michaeldyrynda/laravel-cascade-soft-deletes: Cascade Delete & Restore 
