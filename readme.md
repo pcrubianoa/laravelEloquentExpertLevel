@@ -1871,3 +1871,145 @@ This should look like this:
 <img width="1680" alt="Login" src="thumb.png">   
 
 [Associate files with Eloquent models - Github](https://github.com/spatie/laravel-medialibrary)
+
+## dimsav/laravel-translatable: Package for Multilingual Models
+
+    composer require dimsav/laravel-translatable
+
+    php artisan make:model ArticleTranslation -m
+
+
+    Schema::create('article_translations', function(Blueprint $table)
+    {
+        $table->increments('id');
+        $table->integer('country_id')->unsigned();
+        $table->string('name');
+        $table->string('locale')->index();
+
+        $table->unique(['country_id','locale']);
+        $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
+    });
+
+ Configuration:
+
+    php artisan vendor:publish --tag=translatable
+
+Install laravel Collective:
+
+    composer require "laravelcollective/html":"^5.4.0"
+
+Article model:
+
+    <?php
+
+    namespace App;
+
+    use Dimsav\Translatable\Translatable;
+    use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\SoftDeletes;
+
+    class Article extends Model
+    {
+        use SoftDeletes;
+        use Translatable;
+
+        protected $fillable = ['title', 'article_text'];
+        public $translatedAttributes = ['title', 'article_text'];
+    }
+
+ArticleTranslation model:
+
+    <?php
+
+    namespace App;
+
+    use Illuminate\Database\Eloquent\Model;
+
+    class ArticleTranslation extends Model
+    {
+        public $timestamps = false;
+        protected $fillable = ['title', 'article_text'];
+    }
+
+create view:
+
+   {!! Form::open(['method' => 'POST', 'route' => ['admin.articles.store']]) !!}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            @lang('global.app_create')
+        </div>
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('en_title', trans('global.articles.title').' [EN]', ['class' => 'control-label']) !!}
+                    {!! Form::text('en_title', old('en_title'), ['class' => 'form-control', 'placeholder' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('en_title'))
+                        <p class="help-block">
+                            {{ $erros->first('en_title') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('en_article_text', trans('global.articles.title').' [EN]', ['class' => 'control-label']) !!}
+                    {!! Form::text('en_article_text', old('en_article_text'), ['class' => 'form-control', 'placeholder' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('en_article_text'))
+                        <p class="help-block">
+                            {{ $erros->first('en_article_text') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('es_title', trans('global.articles.title').' [ES]', ['class' => 'control-label']) !!}
+                    {!! Form::text('es_title', old('es_title'), ['class' => 'form-control', 'placeholder' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('es_title'))
+                        <p class="help-block">
+                            {{ $erros->first('es_title') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 form-group">
+                    {!! Form::label('es_article_text', trans('global.articles.title').' [ES]', ['class' => 'control-label']) !!}
+                    {!! Form::text('es_article_text', old('es_article_text'), ['class' => 'form-control', 'placeholder' => '']) !!}
+                    <p class="help-block"></p>
+                    @if($errors->has('es_article_text'))
+                        <p class="help-block">
+                            {{ $erros->first('es_article_text') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+
+ArticlesController:
+
+    public function store(StoreArticlesRequest $request)
+    {
+        if(! Gate::allows('article_create')){
+            return abort(401);
+        }
+        Article::create(
+            [
+                'en' => [
+                    'title' => $request->en_title,
+                    'article_text' => $request->en_article_text
+                ],
+                'es' => [
+                    'title' => $request->es_title,
+                    'article_text' => $request->es_article_text
+                ]
+            ]
+        );
+        return redirect()->route('admin.articles.index');
+    }
+    
+[A Laravel package for multilingual models](https://github.com/dimsav/laravel-translatable)

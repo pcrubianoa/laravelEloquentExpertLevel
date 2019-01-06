@@ -33,9 +33,24 @@ class ArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreArticlesRequest $request)
     {
-        //
+        if(! Gate::allows('article_create')){
+            return abort(401);
+        }
+        Article::create(
+            [
+                'en' => [
+                    'title' => $request->en_title,
+                    'article_text' => $request->en_article_text
+                ],
+                'es' => [
+                    'title' => $request->es_title,
+                    'article_text' => $request->es_article_text
+                ]
+            ]
+        );
+        return redirect()->route('admin.articles.index');
     }
 
     /**
