@@ -2011,5 +2011,25 @@ ArticlesController:
         );
         return redirect()->route('admin.articles.index');
     }
-    
+
+
+`app.php`:
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Locale Configuration
+    |--------------------------------------------------------------------------
+    |
+    | The application locale determines the default locale that will be used
+    | by the translation service provider. You are free to set this value
+    | to any of the locales which will be supported by the application.
+    |
+    */
+
+    'locale' => 'en',
+
+to translate any field we use the translate method:
+
+    {{ $article->translate('es')->title }}
+
 [A Laravel package for multilingual models](https://github.com/dimsav/laravel-translatable)
