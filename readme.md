@@ -7,12 +7,12 @@
  - [Properties for Tables, Keys, Increments, Pages and Dates](#properties-for-tables-keys-increments-pages-and-dates)
 
 ## Create/Update in Eloquent
- -  "Magic" methods: FirstOrCreate() and other 2-in-1s 
- -  Model Observers: "listening" to record changes 
- -  Accessors and Mutators: Change Model Values 
- -  Database Seeds and Factories: Prepare Dummy Data
- -  Seeds and Factories with Relationships 
- -  Check Methods/Properties in Eloquent API Docs 
+ -  ["Magic" methods: FirstOrCreate() and other 2-in-1s] (#magic-methods-firstorcreate-and-other-2-in-1s)
+ -  [Model Observers: "listening" to record changes] (l#model-observers-listening-to-record-changes)
+ -  [Accessors and Mutators: Change Model Values] (#accessors-and-mutators-change-model-values)
+ -  [Database Seeds and Factories: Prepare Dummy Data](#database-seeds-and-factories-prepare-dummy-data)
+ -  [Seeds and Factories with Relationships] (#seeds-and-factories-with-relationships)
+ -  [Check Methods/Properties in Eloquent API Docs](#check-methodsproperties-in-eloquent-api-docs)
 
 
 ## Querying and Filtering Data Effectively
