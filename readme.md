@@ -1557,7 +1557,7 @@ Queries output in debugbar:
 
 [Laravel Debugbar Github](https://github.com/barryvdh/laravel-debugbar)
 
-## erformance Test: Eloquent vs Query Builder vs SQL
+## Performance Test: Eloquent vs Query Builder vs SQL
 
     public function test1()
     {
