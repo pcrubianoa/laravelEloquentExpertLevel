@@ -7,55 +7,55 @@
  - [Properties for Tables, Keys, Increments, Pages and Dates](#properties-for-tables-keys-increments-pages-and-dates)
 
 ## Create/Update in Eloquent
- -  ["Magic" methods: FirstOrCreate() and other 2-in-1s] (#magic-methods-firstorcreate-and-other-2-in-1s)
- -  [Model Observers: "listening" to record changes] (l#model-observers-listening-to-record-changes)
- -  [Accessors and Mutators: Change Model Values] (#accessors-and-mutators-change-model-values)
+ -  ["Magic" methods: FirstOrCreate() and other 2-in-1s](#magic-methods-firstorcreate-and-other-2-in-1s)
+ -  [Model Observers: "listening" to record changes](#model-observers-listening-to-record-changes)
+ -  [Accessors and Mutators: Change Model Values](#accessors-and-mutators-change-model-values)
  -  [Database Seeds and Factories: Prepare Dummy Data](#database-seeds-and-factories-prepare-dummy-data)
- -  [Seeds and Factories with Relationships] (#seeds-and-factories-with-relationships)
+ -  [Seeds and Factories with Relationships](#seeds-and-factories-with-relationships)
  -  [Check Methods/Properties in Eloquent API Docs](#check-methodsproperties-in-eloquent-api-docs)
 
 
 ## Querying and Filtering Data Effectively
- -  Advanced find() and all(): Methods and Parameters 
- -  WhereX Magic Methods for Fields and Dates 
- -  Brackets to Eloquent: (A and B) or (C and D) 
- -  Query Scopes: Where Conditions Applied Globally
- -  Eloquent when(): More Elegant if-statement 
- -  Ordering by Relationship: orderBy vs sortBy 
- -  Raw Database Queries with Examples 
+ -  [Advanced find() and all(): Methods and Parameters](#advanced-find-and-all-methods-and-parameters)
+ -  [WhereX Magic Methods for Fields and Dates](#wherex-magic-methods-for-fields-and-dates)
+ -  [Brackets to Eloquent: (A and B) or (C and D)](#brackets-to-eloquent-a-and-b-or-c-and-d)
+ -  [Query Scopes: Where Conditions Applied Globally](#query-scopes-where-conditions-applied-globally)
+ -  [Eloquent when(): More Elegant if-statement](#eloquent-when-more-elegant-if-statement)
+ -  [Ordering by Relationship: orderBy vs sortBy](#ordering-by-relationship-orderby-vs-sortby)
+ -  [Raw Database Queries with Examples](#raw-database-queries-with-examples)
 
 
 ## Eloquent Collections and their Methods
- - Why You Need Collections and How to Use Them 
- - Methods for Fetching and Transforming 
- - Methods for Filtering with Callbacks 
- - Methods for Math Calculations 
- - Methods for Debugging 
+ - [Why You Need Collections and How to Use Them](#why-you-need-collections-and-how-to-use-them)
+ - [Methods for Fetching and Transforming](#methods-for-fetching-and-transforming)
+ - [Methods for Filtering with Callbacks](#methods-for-filtering-with-callbacks)
+ - [Methods for Math Calculations](#methods-for-math-calculations)
+ - [Methods for Debugging](#methods-for-debugging)
 |
 
 ## Advanced Eloquent Relationships
- - Polymorphic Relations Explained 
- - Polymorphic Many-to-Many Relations 
- - Advanced Pivot Tables in Many-to-Many 
- - HasManyThrough Relations 
- - Creating Records with Relationships 
- - Querying Records with Relationships 
+ - [Polymorphic Relations Explained](#polymorphic-relations-explained)
+ - [Polymorphic Many-to-Many Relations](#polymorphic-many-to-many-relations)
+ - [Advanced Pivot Tables in Many-to-Many](#advanced-pivot-tables-in-many-to-many)
+ - [HasManyThrough Relations](#hasmanythrough-relations)
+ - [Creating Records with Relationships](#creating-records-with-relationships)
+ - [Querying Records with Relationships](#querying-records-with-relationships)
 
 
 ## Eloquent Performance
- - Laravel Debugbar: How to Measure Performance 
- - Performance Test: Eloquent vs Query Builder vs SQL 
- - N+1 Problem and Eager Loading: Be Careful with Eloquent 
- - Caching in Eloquent 
+ - [Laravel Debugbar: How to Measure Performance](#laravel-debugbar-how-to-measure-performance)
+ - [Performance Test: Eloquent vs Query Builder vs SQL](#performance-test-eloquent-vs-query-builder-vs-sql)
+ - [N+1 Problem and Eager Loading: Be Careful with Eloquent](#n1-problem-and-eager-loading-be-careful-with-eloquent)
+ - [Caching in Eloquent](#caching-in-eloquent)
 
 
 ## Useful Packages to Extend Eloquent
- - spatie/laravel-medialibrary: Associate files with Eloquent models 
- - dimsav/laravel-translatable: Package for Multilingual Models
- - spatie/eloquent-sortable: Sortable Eloquent Models 
- - spatie/laravel-tags: Add Tags and Taggable Behavior 
- - owen-it/laravel-auditing: Record the Changes From Models 
- - michaeldyrynda/laravel-cascade-soft-deletes: Cascade Delete & Restore 
+ - [spatie/laravel-medialibrary: Associate files with Eloquent models](#spatielaravel-medialibrary-associate-files-with-eloquent-models)
+ - [dimsav/laravel-translatable: Package for Multilingual Models](#dimsavlaravel-translatable-package-for-multilingual-models)
+ - [spatie/eloquent-sortable: Sortable Eloquent Models](https://github.com/spatie/eloquent-sortable)
+ - [spatie/laravel-tags: Add Tags and Taggable Behavior](https://github.com/spatie/laravel-tags)
+ - [owen-it/laravel-auditing: Record the Changes From Models](https://github.com/owen-it/laravel-auditing)
+ - [michaeldyrynda/laravel-cascade-soft-deletes: Cascade Delete & Restore](https://github.com/michaeldyrynda/laravel-cascade-soft-deletes)
 
 # Eloquent Model Options and Settings
 
